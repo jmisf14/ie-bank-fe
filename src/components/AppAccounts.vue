@@ -4,19 +4,17 @@
       <div class="row">
         <div class="col-sm-12">
           <h1>Accounts</h1>
+          <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
+
           <hr />
           <br />
           <!-- Allert Message -->
           <b-alert v-if="showMessage" variant="success" show>{{
             message
-          }}</b-alert>
+            }}</b-alert>
           <!-- b-alert v-if="error" variant="danger" show>{{ error }}</b-alert-->
 
-          <button
-            type="button"
-            class="btn btn-success btn-sm"
-            v-b-modal.account-modal
-          >
+          <button type="button" class="btn btn-success btn-sm" v-b-modal.account-modal>
             Create Account
           </button>
           <br /><br />
@@ -27,6 +25,7 @@
                 <th scope="col">Account Number</th>
                 <th scope="col">Account Balance</th>
                 <th scope="col">Account Currency</th>
+                <th scope="col">Account Country</th>
                 <th scope="col">Account Status</th>
                 <th scope="col">Actions</th>
               </tr>
@@ -38,30 +37,19 @@
                 <td>{{ account.balance }}</td>
                 <td>{{ account.currency }}</td>
                 <td>
-                  <span
-                    v-if="account.status == 'Active'"
-                    class="badge badge-success"
-                    >{{ account.status }}</span
-                  >
+                  <span v-if="account.status == 'Active'" class="badge badge-success">{{ account.status }}</span>
                   <span v-else class="badge badge-danger">{{
                     account.status
-                  }}</span>
+                    }}</span>
                 </td>
+                <td>{{ account.country }}</td>
                 <td>
                   <div class="btn-group" role="group">
-                    <button
-                      type="button"
-                      class="btn btn-info btn-sm"
-                      v-b-modal.edit-account-modal
-                      @click="editAccount(account)"
-                    >
+                    <button type="button" class="btn btn-info btn-sm" v-b-modal.edit-account-modal
+                      @click="editAccount(account)">
                       Edit
                     </button>
-                    <button
-                      type="button"
-                      class="btn btn-danger btn-sm"
-                      @click="deleteAccount(account)"
-                    >
+                    <button type="button" class="btn btn-danger btn-sm" @click="deleteAccount(account)">
                       Delete
                     </button>
                   </div>
@@ -74,40 +62,22 @@
           </footer>
         </div>
       </div>
-      <b-modal
-        ref="addAccountModal"
-        id="account-modal"
-        title="Create a new account"
-        hide-backdrop
-        hide-footer
-      >
+      <b-modal ref="addAccountModal" id="account-modal" title="Create a new account" hide-backdrop hide-footer>
         <b-form @submit="onSubmit" class="w-100">
-          <b-form-group
-            id="form-name-group"
-            label="Account Name:"
-            label-for="form-name-input"
-          >
-            <b-form-input
-              id="form-name-input"
-              type="text"
-              v-model="createAccountForm.name"
-              placeholder="Account Name"
-              required
-            >
+          <b-form-group id="form-name-group" label="Account Name:" label-for="form-name-input">
+            <b-form-input id="form-name-input" type="text" v-model="createAccountForm.name" placeholder="Account Name"
+              required>
             </b-form-input>
           </b-form-group>
-          <b-form-group
-            id="form-currency-group"
-            label="Currency:"
-            label-for="form-currency-input"
-          >
-            <b-form-input
-              id="form-currency-input"
-              type="text"
-              v-model="createAccountForm.currency"
-              placeholder="$ or €"
-              required
-            >
+          <b-form-group id="form-currency-group" label="Currency:" label-for="form-currency-input">
+            <b-form-input id="form-currency-input" type="text" v-model="createAccountForm.currency" placeholder="$ or €"
+              required>
+            </b-form-input>
+          </b-form-group>
+
+          <b-form-group id="form-country-group" label="Country:" label-for="form-country-input">
+            <b-form-input id="form-country-input" type="text" v-model="createAccountForm.country" placeholder="Spain"
+              required>
             </b-form-input>
           </b-form-group>
 
@@ -116,26 +86,11 @@
       </b-modal>
       <!-- End of Modal for Create Account-->
       <!-- Start of Modal for Edit Account-->
-      <b-modal
-        ref="editAccountModal"
-        id="edit-account-modal"
-        title="Edit the account"
-        hide-backdrop
-        hide-footer
-      >
+      <b-modal ref="editAccountModal" id="edit-account-modal" title="Edit the account" hide-backdrop hide-footer>
         <b-form @submit="onSubmitUpdate" class="w-100">
-          <b-form-group
-            id="form-edit-name-group"
-            label="Account Name:"
-            label-for="form-edit-name-input"
-          >
-            <b-form-input
-              id="form-edit-name-input"
-              type="text"
-              v-model="editAccountForm.name"
-              placeholder="Account Name"
-              required
-            >
+          <b-form-group id="form-edit-name-group" label="Account Name:" label-for="form-edit-name-input">
+            <b-form-input id="form-edit-name-input" type="text" v-model="editAccountForm.name"
+              placeholder="Account Name" required>
             </b-form-input>
           </b-form-group>
           <b-button type="submit" variant="outline-info">Update</b-button>
@@ -156,6 +111,7 @@ export default {
       createAccountForm: {
         name: "",
         currency: "",
+        country: "",
       },
       editAccountForm: {
         id: "",
@@ -257,6 +213,7 @@ export default {
     initForm() {
       this.createAccountForm.name = "";
       this.createAccountForm.currency = "";
+      this.createAccountForm.country = "";
       this.editAccountForm.id = "";
       this.editAccountForm.name = "";
     },
@@ -268,6 +225,7 @@ export default {
       const payload = {
         name: this.createAccountForm.name,
         currency: this.createAccountForm.currency,
+        country: this.createAccountForm.country,
       };
       this.RESTcreateAccount(payload);
       this.initForm();
