@@ -10,7 +10,8 @@ on:
   workflow_dispatch:
 
 env:
-  FRONTEND_WEBAPP_DEV: jmisf14-fe-dev
+  FRONTEND_WEBAPP_DEV: jserrano-fe-dev
+  FRONTEND_WEBAPP_UAT: jserrano-fe-uat
 
 jobs:
   build:
